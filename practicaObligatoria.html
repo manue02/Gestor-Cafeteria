@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="./css/practicaObligatoria.css" />
+		<title>Práctica Obligatoria</title>
+	</head>
+	<body>
+		<h1>Gestor de Cafetería</h1>
+		<div id="mesas" class="panel">
+			<h1>Mesas</h1>
+			<h1><span class="mesa">1</span></h1>
+			<h1><span class="mesa">2</span></h1>
+			<h1><span class="mesa">3</span></h1>
+			<h1><span class="mesa">4</span></h1>
+			<h1><span class="mesa">5</span></h1>
+			<h1><span class="mesa">6</span></h1>
+			<h1><span class="mesa">7</span></h1>
+			<h1><span class="mesa">8</span></h1>
+			<h1><span class="mesa">9</span></h1>
+		</div>
+		<div id="controles" class="panel">
+			<h1>Controles</h1>
+			<form id="frmControles" name="frmControles">
+				<label><h4>Categoría:</h4></label>
+				<select name="categorias"></select
+				><br />
+				<label><h4>Productos:</h4></label>
+				<select name="productos"></select
+				><br />
+			</form>
+			<br />
+			<h4>Unidades:</h4>
+			<div id="teclado">
+				<input type="button" class="tecla" value="1" />
+				<input type="button" class="tecla" value="2" />
+				<input type="button" class="tecla" value="3" />
+				<br />
+				<input type="button" class="tecla" value="4" />
+				<input type="button" class="tecla" value="5" />
+				<input type="button" class="tecla" value="6" />
+				<br />
+				<input type="button" class="tecla" value="7" />
+				<input type="button" class="tecla" value="8" />
+				<input type="button" class="tecla" value="9" />
+				<br />
+			</div>
+		</div>
+		<div id="cuenta" class="panel"></div>
+
+		<div id="NuevoProducto" class="panel">
+			<h3>Nuevo Producto</h3>
+			<form id="frmNuevoProducto" name="frmNuevoProducto">
+				<label>Categoría:</label>
+				<select name="categoria"></select>
+				<label
+					><h4>Nombre:</h4>
+					<input type="text" name="nombre"
+				/></label>
+
+				<label><h4>Precio:</h4></label>
+				<input type="text" name="precio" />
+				<br />
+				<br />
+				<input type="submit" value="Insertar" />
+			</form>
+			<h3>Modificar Producto</h3>
+			<form id="frmModificarProducto" name="frmModificarProducto">
+				<label>Nombre:</label>
+				<select name="Nombre_categoria"></select>
+				<label><h4>Precio:</h4></label>
+				<input type="text" name="precio" /><br />
+				<br />
+				<input type="submit" value="Modificar" />
+			</form>
+			<h3>Mostrar Lista de Cerradas</h3>
+
+			<button id="recuperarDatos">Recuperar Datos</button>
+		</div>
+
+		<div id="ListarCuenta" class="panel"></div>
+		<script src="./js/clases.js"></script>
+		<script src="./js/practicaObligatoria.js"></script>
+	</body>
+</html>
