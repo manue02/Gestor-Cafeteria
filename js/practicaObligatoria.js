@@ -112,7 +112,7 @@ function colorearMesasLibres() {
 	let cuenta = document.getElementById("cuenta");
 	//poner un texto en el div cuenta
 
-	cuenta.innerHTML = "<h1>Cuenta</h1> <h2>Mesa " + 1 + "</h2>";
+	cuenta.innerHTML = "<h3>Selecciona una mesa para ver la cuenta</h3>";
 
 	setTimeout(CategoriaSeleccionada, 1000);
 
@@ -283,7 +283,7 @@ function seleccionarMesa() {
 	if (mesa.classList.contains("ocupada")) {
 		setTimeout(pintarMesaSeleccionada(mesa.innerHTML), 1000);
 	} else {
-		cuenta.innerHTML = "<h1>Cuenta</h1> <h2>Mesa " + mesa.innerHTML + "</h2>";
+		cuenta.innerHTML = "<h1>Cuenta</h1> <h2>Mesa " + mesa.innerHTML + " ¡Esta libre!</h2>";
 	}
 }
 //borrar el combo de productos
@@ -335,7 +335,13 @@ function unidadesProducto() {
 	let rojo = document.getElementsByClassName("mesa");
 	rojo[NumeroMesa - 1].classList.add("ocupada");
 
-	let insertarUnidades = { unidades: parseInt(Teclado), IdProducto: resultadoID, nombre: nombreProducto, precioTotal: precioTotalUnidad, precioUnidad: resultadoPrecio };
+	let insertarUnidades = {
+		unidades: parseInt(Teclado),
+		IdProducto: resultadoID,
+		nombre: nombreProducto,
+		precioTotal: precioTotalUnidad,
+		precioUnidad: resultadoPrecio,
+	};
 
 	fetch(apiRest + "cuentas/" + "Mesa" + NumeroMesa + "/" + resultadoID + ".json", {
 		method: "PUT",
@@ -379,90 +385,107 @@ function unidadesProducto() {
 	console.log(gestor.cuentas);
 }
 
+function ModificarUnidadesBD(sumaUnidades, IdTabla, nombreProducto, precioTotal, NumeroMesa, precioUnidad) {
+	fetch(apiRest + "cuentas/" + "Mesa" + NumeroMesa + "/" + IdTabla + ".json", {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			unidades: sumaUnidades,
+			IdProducto: IdTabla,
+			nombre: nombreProducto,
+			precioTotal: precioTotal,
+			precioUnidad: precioUnidad,
+		}),
+	})
+		.then((response) => response.json())
+		.then((data) => console.log(data));
+}
+
 //funcion para añadir unidades a un producto de la cuenta de una mesa seleccionada y modificar el precio total
 function AñadirUnidad(value) {
 	let nombreProducto = document.getElementById(value).getElementsByTagName("td")[0].innerHTML;
-	let unidades = document.getElementById(value).getElementsByTagName("td")[1].innerHTML;
+
 	let mesa = document.getElementById("cuenta").getElementsByTagName("h2")[0].innerHTML;
 	let NumeroMesa = mesa.substring(5, 6);
-	let IdTabla = document.getElementById(value).getElementsByTagName("td")[2].innerHTML;
+
+	let unidades = document.getElementById(value).getElementsByTagName("td")[1].innerHTML;
 	let sumaUnidades = parseInt(unidades) + 1;
-	let precioUnidad = document.getElementById(value).getElementsByTagName("td")[3].innerHTML;
 
-	let precioUnicaUnidad = precioUnidad / unidades;
+	let precioUnidad = document.getElementById(value).getElementsByTagName("td")[2].innerHTML.substring(0, 4);
+	let unidadPorPrecio = parseFloat((parseFloat(precioUnidad) * sumaUnidades).toFixed(2));
 
-	let PrecioSumaUnidad = parseFloat(precioUnicaUnidad) * parseFloat(sumaUnidades);
+	let cuentaTotal = cuenta.getElementsByTagName("h2")[1].innerHTML.substring(7, 12);
+	let precioTotal = parseFloat(cuentaTotal) + parseFloat(precioUnidad);
 
-	console.log(mesa);
-
-	let precio = document.getElementById(value).getElementsByTagName("td")[4].innerHTML;
-	let sumaPrecio = parseFloat(precio) * parseFloat(sumaUnidades);
-	sumaPrecio = sumaPrecio.toFixed(2);
-
+	cuenta.getElementsByTagName("h2")[1].innerHTML = "Total: " + precioTotal.toFixed(2) + "€";
+	document.getElementById(value).getElementsByTagName("td")[3].innerHTML = unidadPorPrecio + "€";
 	document.getElementById(value).getElementsByTagName("td")[1].innerHTML = sumaUnidades;
-	document.getElementById("cuenta").getElementsByTagName("h2")[1].innerHTML = "Total: " + sumaPrecio;
-	document.getElementById(value).getElementsByTagName("td")[3].innerHTML = PrecioSumaUnidad;
 
-	ModificarUnidadesBD(sumaUnidades, IdTabla, nombreProducto, PrecioSumaUnidad, NumeroMesa);
+	ModificarUnidadesBD(sumaUnidades, value, nombreProducto, unidadPorPrecio, NumeroMesa, precioUnidad);
 }
 
 //funcion para quitar unidades a un producto de la cuenta de una mesa seleccionada y modificar el precio total
 function QuitarUnidad(value) {
+	let nombreProducto = document.getElementById(value).getElementsByTagName("td")[0].innerHTML;
+	console.log(value);
+
 	let mesa = document.getElementById("cuenta").getElementsByTagName("h2")[0].innerHTML;
 	let NumeroMesa = mesa.substring(5, 6);
-	let IdTabla = document.getElementById(value).getElementsByTagName("td")[2].innerHTML;
-	let nombreProducto = document.getElementById(value).getElementsByTagName("td")[0].innerHTML;
+
 	let unidades = document.getElementById(value).getElementsByTagName("td")[1].innerHTML;
-	console.log("Esto es unidades" + unidades);
+	let restaUnidades = parseInt(unidades) - 1;
 
-	let sumaUnidades = parseInt(unidades) - 1;
-	console.log("Esto es sumaUnidades" + sumaUnidades);
+	let precioUnidad = document.getElementById(value).getElementsByTagName("td")[2].innerHTML.substring(0, 4);
+	let unidadPorPrecio = parseFloat((parseFloat(precioUnidad) * restaUnidades).toFixed(2));
 
-	let precioUnidad = document.getElementById(value).getElementsByTagName("td")[3].innerHTML;
-	let precio = document.getElementById(value).getElementsByTagName("td")[4].innerHTML;
+	let cuentaTotal = cuenta.getElementsByTagName("h2")[1].innerHTML.substring(7, 12);
+	let precioTotal = parseFloat(cuentaTotal) - parseFloat(precioUnidad);
 
-	let precioUnicaUnidad = precioUnidad / unidades;
-	console.log("Esto es tal" + precioUnicaUnidad);
-	let precioRestaUnidad = parseFloat(precioUnicaUnidad) - parseFloat(unidades);
+	cuenta.getElementsByTagName("h2")[1].innerHTML = "Total: " + precioTotal.toFixed(2) + "€";
+	document.getElementById(value).getElementsByTagName("td")[3].innerHTML = unidadPorPrecio + "€";
+	document.getElementById(value).getElementsByTagName("td")[1].innerHTML = restaUnidades;
 
-	console.log("Esto es la resta" + precioRestaUnidad);
-
-	let sumaPrecio = parseFloat(precio) * parseFloat(sumaUnidades);
-	sumaPrecio = sumaPrecio.toFixed(2);
-
-	document.getElementById(value).getElementsByTagName("td")[1].innerHTML = sumaUnidades;
-	document.getElementById("cuenta").getElementsByTagName("h2")[1].innerHTML = "Total: " + sumaPrecio;
-	document.getElementById(value).getElementsByTagName("td")[3].innerHTML = precioRestaUnidad;
-
-	//si las unidades son 0, borrar la cuenta y pregunta por si esta seguro de querer borrarla
-	if (sumaUnidades == 0) {
+	if (restaUnidades == 0) {
 		let confirmar = confirm("¿Estas seguro de querer borrar el producto?");
 		if (confirmar) {
-			fetch(apiRest + "cuentas/" + "Mesa" + NumeroMesa + "/" + IdTabla + ".json", {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
+			(async () => {
+				await fetch(apiRest + "cuentas/" + "Mesa" + NumeroMesa + "/" + value + ".json", {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				})
+					.then((response) => response.json())
+					.then((data) => console.log(data));
+			})();
+
+			fetch(apiRest + "cuentas/" + "Mesa" + NumeroMesa + ".json")
 				.then((response) => response.json())
-				.then((data) => console.log(data));
-
-			console.log(apiRest + "cuentas/" + "Mesa" + NumeroMesa + "/" + IdTabla + ".json");
-			setTimeout(pintarMesaSeleccionada(mesa), 1000);
-
-			return true;
+				.then((data) => {
+					let cantidad = Object.keys(data).length;
+					if (cantidad === 1) {
+						liberarMesa();
+					} else {
+						pintarMesaSeleccionada(NumeroMesa);
+					}
+				});
 		}
+	} else {
+		ModificarUnidadesBD(restaUnidades, value, nombreProducto, unidadPorPrecio, NumeroMesa, precioUnidad);
 	}
-
-	ModificarUnidadesBD(sumaUnidades, IdTabla, nombreProducto, precioRestaUnidad, NumeroMesa);
 }
 
 function pintarMesaSeleccionada(mesa) {
-	cuenta.innerHTML = "<h1>Cuenta</h1> <h2>Mesa " + mesa + "<h2>Total:  €</h2>" + "<button class = 'boton' onClick = 'liberarMesa()'>Pagar y liberar la mesa</button>";
+	cuenta.innerHTML =
+		"<h1>Cuenta</h1> <h2>Mesa " +
+		mesa +
+		"<h2>Total:  €</h2>" +
+		"<button class = 'boton' onClick = 'liberarMesa()'>Pagar y liberar la mesa</button>";
 	fetch(apiRest + "cuentas/" + "Mesa" + mesa + ".json")
 		.then((response) => response.json())
 		.then((data) => {
-			console.log(data);
 			let cuenta = document.getElementById("cuenta");
 
 			let tabla1 = document.createElement("table");
@@ -470,8 +493,8 @@ function pintarMesaSeleccionada(mesa) {
 			<tr>
 				<th>Producto</th>
 				<th>Unidades</th>
-				<th>IdProducto</th>
 				<th>Precio</th>
+				<th>Total Producto</th>
 				<th>Añadir</th>
 				</tr>
 			`;
@@ -481,40 +504,28 @@ function pintarMesaSeleccionada(mesa) {
 
 			for (lista in data) {
 				let producto = data[lista];
-				console.log(lista);
+				console.log("La lista ->" + lista);
 
 				precioTotal += parseFloat(producto.precioTotal);
 
-				cuenta.getElementsByTagName("h2")[1].innerHTML = "Total: " + precioTotal + "€";
+				cuenta.getElementsByTagName("h2")[1].innerHTML = "Total: " + precioTotal.toFixed(2) + "€";
 
 				let tabla = document.createElement("table");
 				tabla.innerHTML = `
 				<tr id = ${lista}>
 					<td>${producto.nombre}</td>
 					<td>${producto.unidades}</td>
-					<td>${producto.IdProducto}</td>
+					<td>${producto.precioUnidad}€</td>
 					<td>${producto.precioTotal}€</td>
 					<td><button class = "boton" onClick = "AñadirUnidad(${lista})">+</button> <button class = "boton" onClick = "QuitarUnidad(${lista})">-</button></td>
 
 				</tr>
 				`;
-				cuenta.append(tabla);
+				setTimeout(function () {
+					cuenta.append(tabla);
+				}, 100);
 			}
 		});
-}
-
-function ModificarUnidadesBD(sumaUnidades, IdTabla, nombreProducto, precioUnidad, NumeroMesa) {
-	fetch(apiRest + "cuentas/" + "Mesa" + NumeroMesa + "/" + IdTabla + ".json", {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ unidades: sumaUnidades, IdProducto: IdTabla, nombre: nombreProducto, precioTotal: precioUnidad }),
-	})
-		.then((response) => response.json())
-		.then((data) => console.log(data));
-
-	console.log(apiRest + "cuentas/" + "Mesa" + NumeroMesa + "/" + IdTabla + ".json");
 }
 
 function recuperarDatos() {
