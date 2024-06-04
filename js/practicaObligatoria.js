@@ -393,6 +393,10 @@ function unidadesProducto() {
 	}
 
 	gestor.cuentas.push(cuentaNueva);
+
+	setTimeout(function () {
+		location.reload();
+	}, 500);
 }
 
 function ModificarUnidadesBD(sumaUnidades, IdTabla, nombreProducto, precioTotal, NumeroMesa, precioUnidad) {
@@ -514,16 +518,10 @@ async function pintarMesaSeleccionada(mesa) {
 
 	for (lista in data) {
 		let producto = data[lista];
-		console.log(
-			"La lista ->" +
-				producto.nombre +
-				" " +
-				producto.unidades +
-				" " +
-				producto.precioUnidad +
-				" " +
-				producto.precioTotal
-		);
+
+		if (producto === null) {
+			continue; // Salta a la siguiente iteración del bucle
+		}
 
 		precioTotal += parseFloat(producto.precioTotal);
 		precioUnidad += parseFloat(producto.precioUnidad);
