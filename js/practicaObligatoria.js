@@ -208,16 +208,11 @@ async function insertarProducto(event) {
 		const response = await fetch(apiRest + ficheroProductos + ".json");
 		//los datos JSON devueltos por el servidor.
 		const data = await response.json();
-		console.log(data);
 		const lastProduct = data[data.length - 1];
-		console.log(lastProduct);
 		const lastId = lastProduct.id;
-		console.log(lastId);
 
 		// incrementar el ID en 1
 		const nextId = lastId + 1;
-
-		console.log(nextId);
 
 		// crear el nuevo producto
 		const nuevoProducto = {
@@ -226,8 +221,6 @@ async function insertarProducto(event) {
 			nombre: nombre,
 			precio: precio,
 		};
-
-		console.log(nuevoProducto);
 
 		// enviar el nuevo producto al servidor
 		const postResponse = await fetch(apiRest + ficheroProductos + lastId + ".json", {
@@ -551,8 +544,6 @@ function recuperarDatos() {
 		.then((response) => Object.values(response))
 		.then(mostrarListaCuentasCerradas)
 		.catch(console.log);
-
-	console.log(apiRest + "MesasPagar/" + 9 + ".json");
 }
 
 function mostrarListaCuentasCerradas(data) {

@@ -108,8 +108,7 @@ th {
 	margin-bottom: 5px;
 }
 
-h2 {
-	display: flex;
+h1 {
 	align-items: center;
 	margin-bottom: 1.5rem;
 	font-size: 1.875rem;
@@ -118,8 +117,17 @@ h2 {
 	color: rgba(0, 0, 0, 0.8);
 }
 
-body.dark h2 {
-	color: #fff; /* Esto es aproximadamente equivalente a dark:text-white en Tailwind */
+h2 {
+	align-items: center;
+	margin-bottom: 1.5rem;
+	font-size: 1.5rem;
+	font-weight: 600;
+	column-gap: 0.75rem;
+	color: rgba(0, 0, 0, 0.8);
+}
+
+body.dark h1 {
+	color: #fff;
 }
 
 /* //////////////////////////  Menu CSS  ////////////////////////// */
