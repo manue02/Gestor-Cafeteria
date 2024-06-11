@@ -2,6 +2,7 @@
 
 let catalogo = new Catalogo();
 let arrayProductos = [];
+let arrayCategorias = [];
 let Gestores = new Array(9);
 let contador = 0;
 const apiRest = "https://primerproyecto-34e1f-default-rtdb.asia-southeast1.firebasedatabase.app/";
@@ -58,40 +59,32 @@ function MostrarCategorias(listaCategorias) {
 	BorrarCombo();
 
 	const frmControles = document.getElementById("frmControles");
-
 	const frmNuevoProducto = document.getElementById("frmNuevoProducto");
 
-	for (let categoria of listaCategorias) {
+	listaCategorias.forEach((categoria) => {
 		let lista = document.createElement("option");
-		lista.innerHTML = categoria;
-		frmControles.categorias.add(lista);
-		frmNuevoProducto.categoria.add(lista.cloneNode(true));
-	}
-}
-
-function getCategoriaIndex(categoria) {
-	switch (categoria) {
-		case "Bebidas":
-			return 0;
-		case "Tostadas":
-			return 1;
-		case "Bollería":
-			return 2;
-	}
+		lista.innerHTML = categoria.nombre;
+		if (categoria.activo == true) {
+			frmControles.categorias.add(lista);
+			frmNuevoProducto.categoria.add(lista.cloneNode(true));
+		}
+	});
 }
 
 function CategoriaSeleccionada() {
 	BorrarCombo();
 	let categoria = frmControles.categorias.value;
 
-	for (let i = 0; i < arrayProductos.length; i++) {
-		if (getCategoriaIndex(categoria) == arrayProductos[i].IdCategoria) {
-			let oOption = document.createElement("option");
-			oOption.setAttribute("id", "ComboProductos");
-			oOption.text = arrayProductos[i].NombreProducto;
-			frmControles.productos.add(oOption);
+	arrayCategorias.forEach((indiceCategoria, elementoCategoria) => {
+		for (let i = 0; i < arrayProductos.length; i++) {
+			if (indiceCategoria.nombre == categoria && elementoCategoria == arrayProductos[i].IdCategoria) {
+				let oOption = document.createElement("option");
+				oOption.setAttribute("id", "ComboProductos");
+				oOption.text = arrayProductos[i].NombreProducto;
+				frmControles.productos.add(oOption);
+			}
 		}
-	}
+	});
 }
 
 function recuperarDatosProducto() {
@@ -106,7 +99,10 @@ function recuperarDatoscCategoria() {
 	const ficheroCategoria = "categorias.json";
 	fetch(apiRest + ficheroCategoria)
 		.then((res) => res.json())
-		.then((data) => Object.values(data))
+		.then((data) => {
+			arrayCategorias = Object.values(data);
+			return arrayCategorias;
+		})
 		.then(MostrarCategorias);
 }
 

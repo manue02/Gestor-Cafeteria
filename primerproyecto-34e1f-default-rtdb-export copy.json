@@ -1,0 +1,211 @@
+{
+	" MesasPagar ": {
+		"Fecha": "2023-02-23T19:12:44.950Z",
+		"Hora": "20:12",
+		"Importe": "NaN€",
+		"NumeroMesa": "8"
+	},
+	"categorias": ["Bebidas", "Tostadas", "Bollería"],
+	"cuentas": {
+		"Mesa1": {
+			"1": {
+				"IdProducto": 1,
+				"nombre": "Café con leche",
+				"precioTotal": "3.00",
+				"precioUnidad": "1",
+				"unidades": 3
+			},
+			"5": {
+				"IdProducto": 5,
+				"nombre": "Media con aceite",
+				"precioTotal": "11.25",
+				"precioUnidad": 1.25,
+				"unidades": 9
+			}
+		},
+		"Mesa5": {
+			"13": {
+				"IdProducto": 13,
+				"nombre": "Croissant",
+				"precioTotal": "5.70",
+				"precioUnidad": 0.95,
+				"unidades": 6
+			}
+		},
+		"Mesa6": {
+			"5": {
+				"IdProducto": 5,
+				"nombre": "Media con aceite",
+				"precioTotal": "7.50",
+				"precioUnidad": 1.25,
+				"unidades": 6
+			},
+			"13": {
+				"IdProducto": 13,
+				"nombre": "Croissant",
+				"precioTotal": "4.75",
+				"precioUnidad": 0.95,
+				"unidades": 5
+			},
+			"16": {
+				"IdProducto": 16,
+				"nombre": "Caña de chocolate",
+				"precioTotal": "12.15",
+				"precioUnidad": 1.35,
+				"unidades": 9
+			}
+		},
+		"Mesa8": {
+			"1": {
+				"IdProducto": 1,
+				"nombre": "Café con leche",
+				"precioTotal": "6.00",
+				"precioUnidad": "1",
+				"unidades": 6
+			},
+			"5": {
+				"IdProducto": 5,
+				"nombre": "Media con aceite",
+				"precioTotal": "10.00",
+				"precioUnidad": 1.25,
+				"unidades": 8
+			}
+		},
+		"Mesa9": {
+			"5": {
+				"IdProducto": 5,
+				"nombre": "Media con aceite",
+				"precioTotal": "11.25",
+				"precioUnidad": 1.25,
+				"unidades": 9
+			},
+			"13": {
+				"IdProducto": 13,
+				"nombre": "Croissant",
+				"precioTotal": "5.70",
+				"precioUnidad": 0.95,
+				"unidades": 6
+			}
+		}
+	},
+	"productos": [
+		{
+			"categoria": 0,
+			"id": 1,
+			"nombre": "Café con leche",
+			"precio": "1",
+			"activo": "true"
+		},
+		{
+			"categoria": 0,
+			"id": 2,
+			"nombre": "Té",
+			"precio": 1.05,
+			"activo": "true"
+		},
+		{
+			"categoria": 0,
+			"id": 3,
+			"nombre": "Cola-cao",
+			"precio": "5",
+			"activo": "true"
+		},
+		{
+			"categoria": 0,
+			"id": 4,
+			"nombre": "Chocolate a la taza",
+			"precio": 1.95,
+			"activo": "true"
+		},
+		{
+			"categoria": 1,
+			"id": 5,
+			"nombre": "Media con aceite",
+			"precio": 1.25,
+			"activo": "true"
+		},
+		{
+			"categoria": 1,
+			"id": 6,
+			"nombre": "Entera con aceite",
+			"precio": 1.95,
+			"activo": "true"
+		},
+		{
+			"categoria": 1,
+			"id": 7,
+			"nombre": "Media con aceite y jamón",
+			"precio": 1.95,
+			"activo": "true"
+		},
+		{
+			"categoria": 1,
+			"id": 8,
+			"nombre": "Entera con aceite y jamón",
+			"precio": 2.85,
+			"activo": "true"
+		},
+		{
+			"categoria": 1,
+			"id": 9,
+			"nombre": "Media con mantequilla",
+			"precio": 1.15,
+			"activo": "true"
+		},
+		{
+			"categoria": 1,
+			"id": 10,
+			"nombre": "Entera con mantequilla",
+			"precio": 1.75,
+			"activo": "true"
+		},
+		{
+			"categoria": 1,
+			"id": 11,
+			"nombre": "Media con manteca colorá",
+			"precio": 1.45,
+			"activo": "true"
+		},
+		{
+			"categoria": 1,
+			"id": 12,
+			"nombre": "Entera con manteca colorá",
+			"precio": 2.15,
+			"activo": "true"
+		},
+		{
+			"categoria": 2,
+			"id": 13,
+			"nombre": "Croissant",
+			"precio": 0.95,
+			"activo": "true"
+		},
+		{
+			"categoria": 2,
+			"id": 14,
+			"nombre": "Napolitana de chocolate",
+			"precio": 1.45,
+			"activo": "true"
+		},
+		{
+			"categoria": 2,
+			"id": 15,
+			"nombre": "Caracola de crema",
+			"precio": 1.65,
+			"activo": "true"
+		},
+		{
+			"categoria": 2,
+			"id": 16,
+			"nombre": "Caña de chocolate",
+			"precio": 1.35,
+			"activo": "true"
+		},
+		{
+			"id": 17,
+			"nombre": "yty",
+			"precio": "6",
+			"activo": "true"
+		}
+	]
+}

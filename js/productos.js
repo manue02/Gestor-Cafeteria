@@ -20,6 +20,7 @@ fetch(apiRest + ficheroProductos + ".json")
             <th>Precio</th>
             <th>Categoria</th>
             <th><button id="botonNuevo" onClick = "NuevoProducto()">Nuevo</button></th>
+			<th><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()">Recuperar Producto</button></th>
         </tr>`;
 
 		TablaProductos.append(tabla1);
@@ -48,6 +49,9 @@ fetch(apiRest + ficheroProductos + ".json")
             <td><button id="botonEliminar${arrayProductos[i].id}" onClick = "EliminarProducto(${arrayProductos[i].id})">Eliminar</button></td>`;
 
 				tabla1.append(tr);
+			} else {
+				select = document.getElementsByName("ProductoEliminado")[0];
+				select.innerHTML += `<option value="${arrayProductos[i].id}">${arrayProductos[i].nombre}</option>`;
 			}
 		}
 	});
@@ -69,6 +73,7 @@ async function NuevoProducto() {
 	// crear el nuevo producto
 	const nuevoProducto = {
 		id: nextId,
+		activo: "true",
 		categoria: parseInt(categoria),
 		nombre: nombre,
 		precio: precio,
@@ -128,4 +133,29 @@ async function EliminarProducto(id) {
 	});
 
 	await updateResponse.json();
+}
+
+function RecuperarProductoModal() {
+	var miModal = new bootstrap.Modal(document.getElementById("miModal"));
+	miModal.show();
+}
+
+function RecuperarProducto() {
+	let id = document.getElementsByName("ProductoEliminado")[0].value;
+
+	fetch(apiRest + ficheroProductos + "/" + (id - 1) + ".json")
+		.then((res) => res.json())
+		.then((producto) => {
+			producto.activo = "true";
+
+			const updateResponse = fetch(apiRest + ficheroProductos + "/" + (id - 1) + ".json", {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(producto),
+			});
+
+			return updateResponse;
+		});
 }
