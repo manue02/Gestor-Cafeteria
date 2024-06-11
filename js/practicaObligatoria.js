@@ -9,9 +9,6 @@ const apiRest = "https://primerproyecto-34e1f-default-rtdb.asia-southeast1.fireb
 arrayProductos = catalogo.productos;
 
 frmControles.categorias.addEventListener("change", CategoriaSeleccionada);
-frmNuevoProducto.addEventListener("submit", insertarProducto);
-frmModificarProducto.addEventListener("submit", actualizarPrecioProducto);
-document.getElementById("recuperarDatos").addEventListener("click", recuperarDatos);
 
 document.addEventListener("DOMContentLoaded", colorearMesasLibres);
 
@@ -39,7 +36,7 @@ function CargarProductos(listaProductos) {
 	}
 
 	// Limpiar el select antes de agregar nuevas opciones
-	let select = frmModificarProducto.Nombre_categoria;
+	let select = frmControles.productos;
 	while (select.firstChild) {
 		select.removeChild(select.firstChild);
 	}
@@ -59,14 +56,12 @@ function MostrarCategorias(listaCategorias) {
 	BorrarCombo();
 
 	const frmControles = document.getElementById("frmControles");
-	const frmNuevoProducto = document.getElementById("frmNuevoProducto");
 
 	listaCategorias.forEach((categoria) => {
 		let lista = document.createElement("option");
 		lista.innerHTML = categoria.nombre;
 		if (categoria.activo == true) {
 			frmControles.categorias.add(lista);
-			frmNuevoProducto.categoria.add(lista.cloneNode(true));
 		}
 	});
 }
@@ -189,91 +184,6 @@ function liberarMesa() {
 		.then((res) => res.json())
 		.then((data) => console.log(data));
 	contador++;
-}
-
-async function insertarProducto(event) {
-	const ficheroProductos = "productos/";
-	const frmNuevoProducto = document.getElementById("frmNuevoProducto");
-	const nombre = frmNuevoProducto.nombre.value.trim();
-	const precio = frmNuevoProducto.precio.value;
-	let categorias = frmNuevoProducto.categoria.value;
-	let categoria = getCategoriaIndex(categorias);
-	event.preventDefault();
-
-	try {
-		const response = await fetch(apiRest + ficheroProductos + ".json");
-		//los datos JSON devueltos por el servidor.
-		const data = await response.json();
-		const lastProduct = data[data.length - 1];
-		const lastId = lastProduct.id;
-
-		// incrementar el ID en 1
-		const nextId = lastId + 1;
-
-		// crear el nuevo producto
-		const nuevoProducto = {
-			id: nextId,
-			categoria: categoria,
-			nombre: nombre,
-			precio: precio,
-		};
-
-		// enviar el nuevo producto al servidor
-		const postResponse = await fetch(apiRest + ficheroProductos + lastId + ".json", {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json;charset=utf-8",
-			},
-			body: JSON.stringify(nuevoProducto),
-		});
-
-		await postResponse.json();
-
-		// actualizar el combo de productos
-		recuperarDatosProducto();
-	} catch (error) {
-		console.error(error);
-	}
-
-	// limpiar el formulario
-	frmNuevoProducto.reset();
-
-	setTimeout(CategoriaSeleccionada, 1000);
-}
-
-async function actualizarPrecioProducto(event) {
-	event.preventDefault();
-	let datos = { precio: 0 };
-	const frmModificarProducto = document.getElementById("frmModificarProducto");
-	const nombre = frmModificarProducto.Nombre_categoria.value;
-	const precio = frmModificarProducto.precio.value;
-
-	let id = nombre - 1;
-
-	let url = apiRest + "productos" + "/" + id + ".json";
-
-	datos.precio = precio;
-	try {
-		const response = await fetch(url, {
-			method: "PATCH",
-			headers: {
-				"Content-Type": "application/json;charset=utf-8",
-			},
-			body: JSON.stringify(datos),
-		});
-
-		await response.json();
-	} catch (error) {
-		console.error(error);
-	}
-
-	//limpiar el formulario
-	frmModificarProducto.reset();
-
-	//actualizar el combo de productos
-	recuperarDatosProducto();
-
-	setTimeout(CategoriaSeleccionada, 1000);
 }
 
 //hacer que al hacer click en una mesa se muestre la mesa seleccionada en el div cuenta
@@ -532,47 +442,4 @@ async function pintarMesaSeleccionada(mesa) {
 			cuenta.append(tabla);
 		}, 100);
 	}
-}
-
-function recuperarDatos() {
-	fetch(apiRest + "MesasPagar.json")
-		.then((response) => response.json())
-		.then((response) => Object.values(response))
-		.then(mostrarListaCuentasCerradas)
-		.catch(console.log);
-}
-
-function mostrarListaCuentasCerradas(data) {
-	let capaSalida = document.getElementById("ListarCuenta");
-
-	let tabla = document.createElement("table");
-	tabla.innerHTML = `
-	<tr>
-		<th>Fecha</th>
-		<th>Hora</th>
-		<th>Importe</th>
-		<th>NumeroMesa</th>
-	</tr>
-	`;
-
-	for (lista of data) {
-		console.log(lista);
-		let fila = document.createElement("tr"); // Crear una fila
-		for (lista2 in lista) {
-			let producto = lista[lista2];
-			console.log(producto);
-			let celda = document.createElement("td"); // Crear una celda
-			celda.textContent = producto;
-			fila.append(celda); // Agregar la celda a la fila
-		}
-		tabla.append(fila); // Agregar la fila a la tabla
-	}
-
-	borrarSalida();
-
-	capaSalida.append(tabla);
-}
-
-function borrarSalida() {
-	document.getElementById("ListarCuenta").innerHTML = "";
 }
