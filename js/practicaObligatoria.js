@@ -543,7 +543,6 @@ function recuperarDatos() {
 }
 
 function mostrarListaCuentasCerradas(data) {
-	console.log(data);
 	let capaSalida = document.getElementById("ListarCuenta");
 
 	let tabla = document.createElement("table");
