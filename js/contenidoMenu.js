@@ -2,7 +2,7 @@ const navItems = [
 	{
 		title: "Inicio",
 		label: "Inicio",
-		url: "/index.html",
+		url: "../index.html",
 	},
 	{
 		title: "Productos",
@@ -17,7 +17,7 @@ const navItems = [
 	{
 		title: "Cuentas",
 		label: "Cuentas",
-		url: "/Gestor-Cafeteria/html/cuentas.html",
+		url: "../html/cuentas.html",
 	},
 ];
 

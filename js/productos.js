@@ -2,6 +2,7 @@ let catalogo = new Catalogo();
 let arrayProductos = [];
 arrayProductos = catalogo.productos;
 let arrayCategoria = [];
+let arrayOriginalProductos = [];
 
 const apiRest = "https://primerproyecto-34e1f-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
@@ -22,6 +23,7 @@ fetch(apiRest + ficheroProductos + ".json")
 	.then((productos) => {
 		productos.forEach((producto) => {
 			arrayProductos.push(producto);
+			arrayOriginalProductos.push(producto);
 		});
 
 		let tabla1 = document.createElement("table");
@@ -30,7 +32,7 @@ fetch(apiRest + ficheroProductos + ".json")
             <th>Producto</th>
             <th>Precio</th>
             <th>Categoria</th>
-            <th><button id="botonNuevo" onClick = "formulario()">Nuevo</button></th>
+            <th><button id="botonNuevo" onClick = "formulario(-1)">Nuevo</button></th>
 			<th><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()">Recuperar Producto</button></th>
         </tr>`;
 
@@ -39,20 +41,21 @@ fetch(apiRest + ficheroProductos + ".json")
 		selectCategorias = document.getElementsByName("categoriasSelect")[0];
 
 		for (let i = 0; i < arrayProductos.length; i++) {
-			for (let j = 0; j < arrayCategoria.length; j++) {
-				if (arrayProductos[i].categoria == arrayCategoria[j].id) {
-					arrayProductos[i].categoria = arrayCategoria[j].nombre;
-				}
-			}
-
 			let tr = document.createElement("tr");
 
 			if (arrayProductos[i].activo == "true") {
+				for (let j = 0; j < arrayCategoria.length; j++) {
+					if (arrayProductos[i].categoria == arrayCategoria[j].id) {
+						arrayProductos[i].categoria = arrayCategoria[j].nombre;
+						break;
+					}
+				}
+
 				tr.innerHTML = `
             <td>${arrayProductos[i].nombre}</td>
             <td>${arrayProductos[i].precio}€</td>
             <td>${arrayProductos[i].categoria}</td>
-            <td><button id="botonAñadir${arrayProductos[i].id}" onClick = "ModificarProducto(${arrayProductos[i].id})">Modificar</button></td>
+            <td><button id="botonModificar${arrayProductos[i].id}"  onClick = "formulario(${arrayProductos[i].id})">Modificar</button></td>
             <td><button id="botonEliminar${arrayProductos[i].id}" onClick = "EliminarProducto(${arrayProductos[i].id})">Eliminar</button></td>`;
 
 				tabla1.append(tr);
@@ -82,9 +85,11 @@ fetch(apiRest + ficheroProductos + ".json")
 	});
 
 async function NuevoProducto() {
-	let nombre = prompt("Introduce el nombre del producto");
-	let precio = prompt("Introduce el precio del producto");
-	let categoria = prompt("Introduce la categoria del producto");
+	let nombre = document.getElementById("colFormLabelNombre").value;
+	let precio = document.getElementById("colFormLabelPrecio").value;
+	let selectElement = document.getElementsByName("categoriasSelect")[0];
+
+	let categoria = selectElement.value;
 
 	const response = await fetch(apiRest + ficheroProductos + ".json");
 	//los datos JSON devueltos por el servidor.
@@ -113,21 +118,28 @@ async function NuevoProducto() {
 	});
 
 	await postResponse.json();
+
+	if (postResponse.ok) {
+		location.reload();
+	}
 }
 
 async function ModificarProducto(id) {
-	let nombre = prompt("Introduce el nombre del producto");
-	let precio = prompt("Introduce el precio del producto");
-	let categoria = prompt("Introduce la categoria del producto");
+	let nombre = document.getElementById("colFormLabelNombre").value;
+	let precio = document.getElementById("colFormLabelPrecio").value;
+	let selectElement = document.getElementsByName("categoriasSelect")[0];
+
+	let categoria = selectElement.value;
 
 	const producto = {
 		id: id,
 		categoria: parseInt(categoria),
 		nombre: nombre,
 		precio: precio,
+		activo: "true",
 	};
 
-	const putResponse = await fetch(apiRest + ficheroProductos + "/" + id + ".json", {
+	const putResponse = await fetch(apiRest + ficheroProductos + "/" + (id - 1) + ".json", {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json;charset=utf-8",
@@ -135,9 +147,11 @@ async function ModificarProducto(id) {
 		body: JSON.stringify(producto),
 	});
 
-	console.log(apiRest + ficheroProductos + "/" + id + ".json");
-
 	await putResponse.json();
+
+	if (putResponse.ok) {
+		location.reload();
+	}
 }
 
 async function EliminarProducto(id) {
@@ -158,6 +172,10 @@ async function EliminarProducto(id) {
 	});
 
 	await updateResponse.json();
+
+	if (updateResponse.ok) {
+		location.reload();
+	}
 }
 
 function RecuperarProductoModal() {
@@ -165,27 +183,59 @@ function RecuperarProductoModal() {
 	miModal.show();
 }
 
-function formulario() {
+function formulario(value) {
+	console.log(value);
 	var formulario = new bootstrap.Modal(document.getElementById("formulario"));
 	formulario.show();
+
+	arrayOriginalProductos.forEach((producto) => {
+		let defaultCategoria = "defaultCategoria";
+		if (producto.id == value && producto.nombre != undefined) {
+			document.getElementById("colFormLabelNombre").value = producto.nombre;
+			document.getElementById("colFormLabelPrecio").value = producto.precio;
+			document.getElementsByName("categoriasSelect")[0].value = defaultCategoria;
+		}
+	});
+
+	if (value == -1) {
+		let boton = document.querySelector('button[name="ModificarProducto"]');
+		boton.style.display = "none";
+
+		let boton2 = document.querySelector('button[name="NuevoProducto"]');
+		boton2.style.display = "block";
+	} else {
+		let boton = document.querySelector('button[name="NuevoProducto"]');
+		boton.style.display = "none";
+
+		let boton2 = document.querySelector('button[name="ModificarProducto"]');
+		boton2.style.display = "block";
+
+		boton2.addEventListener("click", function () {
+			ModificarProducto(value);
+		});
+	}
 }
 
-function RecuperarProducto() {
+async function RecuperarProducto() {
 	let id = document.getElementsByName("ProductoEliminado")[0].value;
 
-	fetch(apiRest + ficheroProductos + "/" + (id - 1) + ".json")
-		.then((res) => res.json())
-		.then((producto) => {
-			producto.activo = "true";
+	const getResponse = await fetch(apiRest + ficheroProductos + "/" + (id - 1) + ".json");
+	const producto = await getResponse.json();
 
-			const updateResponse = fetch(apiRest + ficheroProductos + "/" + (id - 1) + ".json", {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(producto),
-			});
+	producto.activo = "true";
 
-			return updateResponse;
-		});
+	// Finalmente, actualiza el producto
+	const updateResponse = await fetch(apiRest + ficheroProductos + "/" + (id - 1) + ".json", {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(producto),
+	});
+
+	await updateResponse.json();
+
+	if (updateResponse.ok) {
+		location.reload();
+	}
 }
