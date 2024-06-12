@@ -1,8 +1,19 @@
 let catalogo = new Catalogo();
 let arrayProductos = [];
 arrayProductos = catalogo.productos;
+let arrayCategoria = [];
 
 const apiRest = "https://primerproyecto-34e1f-default-rtdb.asia-southeast1.firebasedatabase.app/";
+
+const ficheroCategoria = "categorias";
+fetch(apiRest + ficheroCategoria + ".json")
+	.then((res) => res.json())
+	.then((data) => Object.values(data))
+	.then((categorias) => {
+		categorias.forEach((categoria) => {
+			arrayCategoria.push(categoria);
+		});
+	});
 
 const ficheroProductos = "productos";
 fetch(apiRest + ficheroProductos + ".json")
@@ -25,18 +36,13 @@ fetch(apiRest + ficheroProductos + ".json")
 
 		TablaProductos.append(tabla1);
 		select = document.getElementsByName("ProductoEliminado")[0];
+		selectCategorias = document.getElementsByName("categoriasSelect")[0];
 
 		for (let i = 0; i < arrayProductos.length; i++) {
-			switch (arrayProductos[i].categoria) {
-				case 0:
-					arrayProductos[i].categoria = "Bebidas";
-					break;
-				case 1:
-					arrayProductos[i].categoria = "Tostadas";
-					break;
-				case 2:
-					arrayProductos[i].categoria = "Bollería";
-					break;
+			for (let j = 0; j < arrayCategoria.length; j++) {
+				if (arrayProductos[i].categoria == arrayCategoria[j].id) {
+					arrayProductos[i].categoria = arrayCategoria[j].nombre;
+				}
 			}
 
 			let tr = document.createElement("tr");
@@ -62,6 +68,16 @@ fetch(apiRest + ficheroProductos + ".json")
 
 			let botonRecuperar = document.getElementsByName("RecuperarProducto");
 			botonRecuperar[0].disabled = true;
+		}
+
+		if (selectCategorias.value == "default" && selectCategorias.length <= 1) {
+			let option = document.querySelector('option[value="default"]');
+			option.innerHTML = "No hay categorias";
+			selectCategorias.disabled = true;
+		} else {
+			for (let i = 0; i < arrayCategoria.length; i++) {
+				selectCategorias.innerHTML += `<option value="${arrayCategoria[i].id}">${arrayCategoria[i].nombre}</option>`;
+			}
 		}
 	});
 

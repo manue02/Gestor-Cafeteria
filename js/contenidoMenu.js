@@ -17,7 +17,7 @@ const navItems = [
 	{
 		title: "Cuentas",
 		label: "Cuentas",
-		url: "../html/cuentas.html",
+		url: "/Gestor-Cafeteria/html/cuentas.html",
 	},
 ];
 
