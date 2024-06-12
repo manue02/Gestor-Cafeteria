@@ -2,22 +2,22 @@ const navItems = [
 	{
 		title: "Inicio",
 		label: "Inicio",
-		url: "../index.html",
+		url: "/Gestor-Cafeteria/index.html",
 	},
 	{
 		title: "Productos",
 		label: "Productos",
-		url: "../html/productos.html",
+		url: "/Gestor-Cafeteria/html/productos.html",
 	},
 	{
 		title: "Categoria",
 		label: "Categoria",
-		url: "../html/categoria.html",
+		url: "/Gestor-Cafeteria/html/categoria.html",
 	},
 	{
 		title: "Cuentas",
 		label: "Cuentas",
-		url: "../html/cuentas.html",
+		url: "/Gestor-Cafeteria/html/cuentas.html",
 	},
 ];
 
