@@ -7,17 +7,17 @@ const navItems = [
 	{
 		title: "Productos",
 		label: "Productos",
-		url: "/html/productos.html",
+		url: "../html/productos.html",
 	},
 	{
 		title: "Categoria",
 		label: "Categoria",
-		url: "/html/categoria.html",
+		url: "../html/categoria.html",
 	},
 	{
 		title: "Cuentas",
 		label: "Cuentas",
-		url: "/html/cuentas.html",
+		url: "../html/cuentas.html",
 	},
 ];
 
