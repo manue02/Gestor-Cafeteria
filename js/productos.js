@@ -19,11 +19,12 @@ fetch(apiRest + ficheroProductos + ".json")
             <th>Producto</th>
             <th>Precio</th>
             <th>Categoria</th>
-            <th><button id="botonNuevo" onClick = "NuevoProducto()">Nuevo</button></th>
+            <th><button id="botonNuevo" onClick = "formulario()">Nuevo</button></th>
 			<th><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()">Recuperar Producto</button></th>
         </tr>`;
 
 		TablaProductos.append(tabla1);
+		select = document.getElementsByName("ProductoEliminado")[0];
 
 		for (let i = 0; i < arrayProductos.length; i++) {
 			switch (arrayProductos[i].categoria) {
@@ -50,9 +51,17 @@ fetch(apiRest + ficheroProductos + ".json")
 
 				tabla1.append(tr);
 			} else {
-				select = document.getElementsByName("ProductoEliminado")[0];
 				select.innerHTML += `<option value="${arrayProductos[i].id}">${arrayProductos[i].nombre}</option>`;
 			}
+		}
+
+		if (select.value == "default" && select.length <= 1) {
+			let option = document.querySelector('option[value="default"]');
+			option.innerHTML = "No hay productos eliminados";
+			select.disabled = true;
+
+			let botonRecuperar = document.getElementsByName("RecuperarProducto");
+			botonRecuperar[0].disabled = true;
 		}
 	});
 
@@ -138,6 +147,11 @@ async function EliminarProducto(id) {
 function RecuperarProductoModal() {
 	var miModal = new bootstrap.Modal(document.getElementById("miModal"));
 	miModal.show();
+}
+
+function formulario() {
+	var formulario = new bootstrap.Modal(document.getElementById("formulario"));
+	formulario.show();
 }
 
 function RecuperarProducto() {
