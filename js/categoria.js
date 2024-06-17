@@ -16,7 +16,7 @@ fetch(apiRest + ficheroCategoria + ".json")
 		tabla1.innerHTML = `
         <tr>
             <th>Categoria</th>
-            <th><button id="botonNuevo" onClick = "NuevaCategoria()">Nuevo</button></th>
+            <th><button id="botonNuevo" onClick = "formulario(-1)">Nuevo</button></th>
             <th><button id="RecuperarCategoriaModal" onClick = "RecuperarCategoriaModal()">Recuperar Categoria</button></th>
 
         </tr>`;
@@ -29,7 +29,7 @@ fetch(apiRest + ficheroCategoria + ".json")
 			if (arrayCategoria[i].activo == true) {
 				tr.innerHTML = `
             <td>${arrayCategoria[i].nombre}</td>
-            <td><button id="botonModificar${arrayCategoria[i].id}" onClick = "ModificarCategoria(${arrayCategoria[i].id})">Modificar</button></td>
+            <td><button id="botonModificar${arrayCategoria[i].id}" onClick = "formulario(${arrayCategoria[i].id})">Modificar</button></td>
             <td><button id="botonEliminar${arrayCategoria[i].id}" onClick = "EliminarCategoria(${arrayCategoria[i].id})">Eliminar</button></td>`;
 
 				tabla1.append(tr);
@@ -41,7 +41,7 @@ fetch(apiRest + ficheroCategoria + ".json")
 	});
 
 async function NuevaCategoria() {
-	let nombre = prompt("Introduce el nombre de la categoria");
+	let nombre = document.getElementById("colFormLabelNombreCategoria").value;
 
 	const response = await fetch(apiRest + ficheroCategoria + ".json");
 	const data = await response.json();
@@ -61,10 +61,14 @@ async function NuevaCategoria() {
 	});
 
 	await putResponse.json();
+
+	if (putResponse.ok) {
+		location.reload();
+	}
 }
 
 async function ModificarCategoria(id) {
-	let nombre = prompt("Introduce el nuevo nombre de la categoria");
+	let nombre = document.getElementById("colFormLabelNombreCategoria").value;
 
 	const modificarCategoria = {
 		nombre: nombre,
@@ -81,6 +85,10 @@ async function ModificarCategoria(id) {
 	});
 
 	await putResponse.json();
+
+	if (putResponse.ok) {
+		location.reload();
+	}
 }
 
 async function EliminarCategoria(id) {
@@ -102,11 +110,45 @@ async function EliminarCategoria(id) {
 	});
 
 	await putResponse.json();
+
+	if (putResponse.ok) {
+		location.reload();
+	}
 }
 
 function RecuperarCategoriaModal() {
 	var miModal = new bootstrap.Modal(document.getElementById("miModal"));
 	miModal.show();
+}
+
+function formulario(value) {
+	var formulario = new bootstrap.Modal(document.getElementById("formulario"));
+	formulario.show();
+
+	arrayCategoria.forEach((categoria) => {
+		console.log(categoria);
+		if (categoria.id == value && categoria.nombre != undefined) {
+			document.getElementById("colFormLabelNombreCategoria").value = categoria.nombre;
+		}
+	});
+
+	if (value == -1) {
+		let boton = document.querySelector('button[name="ModificarCategoria"]');
+		boton.style.display = "none";
+
+		let boton2 = document.querySelector('button[name="NuevaCategoria"]');
+		boton2.style.display = "block";
+	} else {
+		let boton = document.querySelector('button[name="NuevaCategoria"]');
+		boton.style.display = "none";
+
+		let boton2 = document.querySelector('button[name="ModificarCategoria"]');
+		boton2.style.display = "block";
+
+		boton2.addEventListener("click", function () {
+			ModificarCategoria(value);
+		});
+	}
 }
 
 async function RecuperarCategoria() {
@@ -124,5 +166,9 @@ async function RecuperarCategoria() {
 		body: JSON.stringify(categoria),
 	});
 
-	return updateResponse;
+	await updateResponse.json();
+
+	if (updateResponse.ok) {
+		location.reload();
+	}
 }
