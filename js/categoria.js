@@ -22,6 +22,7 @@ fetch(apiRest + ficheroCategoria + ".json")
         </tr>`;
 
 		TablaCategoria.append(tabla1);
+		select = document.getElementsByName("CategoriaEliminado")[0];
 
 		for (let i = 0; i < arrayCategoria.length; i++) {
 			let tr = document.createElement("tr");
@@ -34,9 +35,17 @@ fetch(apiRest + ficheroCategoria + ".json")
 
 				tabla1.append(tr);
 			} else {
-				select = document.getElementsByName("ProductoEliminado")[0];
 				select.innerHTML += `<option value="${arrayCategoria[i].id}">${arrayCategoria[i].nombre}</option>`;
 			}
+		}
+
+		if (select.value == "default" && select.length <= 1) {
+			let option = document.querySelector('option[value="default"]');
+			option.innerHTML = "No hay categorias eliminadas";
+			select.disabled = true;
+
+			let botonRecuperar = document.getElementsByName("RecuperarCategoria");
+			botonRecuperar[0].disabled = true;
 		}
 	});
 

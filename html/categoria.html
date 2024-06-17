@@ -28,11 +28,15 @@
 					</div>
 					<div class="modal-body">
 						<label>Selecciona una Categoria:</label>
-						<select name="ProductoEliminado"></select>
+						<select name="CategoriaEliminado">
+							<option value="default" selected>Selecciona una categoria</option>
+						</select>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-						<button type="button" onClick="RecuperarCategoria()" class="btn btn-primary">Recuperar Producto</button>
+						<button type="button" name="RecuperarCategoria" onClick="RecuperarCategoria()" class="btn btn-primary">
+							Recuperar Producto
+						</button>
 					</div>
 				</div>
 			</div>
