@@ -18,8 +18,8 @@ fetch(apiRest + ficheroCategoria + ".json")
 			<thead>
         		<tr class="table100-head">
             		<th scope="col">Categoria</th>
-            		<th scope="col"><button id="botonNuevo" onClick = "formulario(-1)" class="btn btn-secondary">Nuevo</button></th>
-            		<th scope="col"><button id="RecuperarCategoriaModal" onClick = "RecuperarCategoriaModal()" class="btn btn-secondary">Recuperar Categoria</button></th>
+            		<th scope="col"><button id="botonNuevo" onClick = "formulario(-1)" class="btn btn-light">Nuevo</button></th>
+            		<th scope="col"><button id="RecuperarCategoriaModal" onClick = "RecuperarCategoriaModal()" class="btn btn-light">Recuperar Categoria</button></th>
 
         		</tr>
 			</thead>

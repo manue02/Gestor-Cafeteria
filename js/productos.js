@@ -34,8 +34,8 @@ fetch(apiRest + ficheroProductos + ".json")
             		<th scope="col">Producto</th>
             		<th scope="col">Precio</th>
             		<th scope="col">Categoria</th>
-            		<th scope="col"><button id="botonNuevo" onClick = "formulario(-1)" class="btn btn-secondary">Nuevo</button></th>
-					<th scope="col"><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()" class="btn btn-secondary">Recuperar Producto</button></th>
+            		<th scope="col"><button id="botonNuevo" onClick = "formulario(-1)" class="btn btn-light">Nuevo</button></th>
+					<th scope="col"><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()" class="btn btn-light">Recuperar Producto</button></th>
         		</tr>
 			</thead>
 			<tbody>`;
