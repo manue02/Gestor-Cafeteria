@@ -13,12 +13,16 @@ fetch(apiRest + ficheroCuenta + ".json")
 
 		let tabla1 = document.createElement("table");
 		tabla1.innerHTML = `
-     	    <tr>
-		        <th>Fecha</th>
-		        <th>Hora</th>
-		        <th>Importe</th>
-		        <th>NumeroMesa</th>
-	        </tr>`;
+     	    <table class="container-table100 ">
+				<thead>
+        			<tr class="table100-head">
+		        		<th>Fecha</th>
+		        		<th>Hora</th>
+		        		<th>Importe</th>
+		        		<th>NumeroMesa</th>
+	        		</tr>
+				</thead>
+				<tbody>`;
 		TablaHistorialCuentas.append(tabla1);
 
 		arrayCuentas.forEach((cuenta) => {
@@ -31,4 +35,5 @@ fetch(apiRest + ficheroCuenta + ".json")
             `;
 			tabla1.append(tr);
 		});
+		tabla1.innerHTML += `</tbody></table>`;
 	});

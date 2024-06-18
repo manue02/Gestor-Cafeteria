@@ -28,13 +28,17 @@ fetch(apiRest + ficheroProductos + ".json")
 
 		let tabla1 = document.createElement("table");
 		tabla1.innerHTML = `
-        <tr>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Categoria</th>
-            <th><button id="botonNuevo" onClick = "formulario(-1)">Nuevo</button></th>
-			<th><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()">Recuperar Producto</button></th>
-        </tr>`;
+		<table class="container-table100 ">
+  			<thead>
+        		<tr class="table100-head">
+            		<th scope="col">Producto</th>
+            		<th scope="col">Precio</th>
+            		<th scope="col">Categoria</th>
+            		<th scope="col"><button id="botonNuevo" onClick = "formulario(-1)" class="btn btn-secondary">Nuevo</button></th>
+					<th scope="col"><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()" class="btn btn-secondary">Recuperar Producto</button></th>
+        		</tr>
+			</thead>
+			<tbody>`;
 
 		TablaProductos.append(tabla1);
 		select = document.getElementsByName("ProductoEliminado")[0];
@@ -52,17 +56,19 @@ fetch(apiRest + ficheroProductos + ".json")
 				}
 
 				tr.innerHTML = `
-            <td>${arrayProductos[i].nombre}</td>
+            <td scope="row">${arrayProductos[i].nombre}</td>
             <td>${arrayProductos[i].precio}€</td>
             <td>${arrayProductos[i].categoria}</td>
-            <td><button id="botonModificar${arrayProductos[i].id}"  onClick = "formulario(${arrayProductos[i].id})">Modificar</button></td>
-            <td><button id="botonEliminar${arrayProductos[i].id}" onClick = "EliminarProducto(${arrayProductos[i].id})">Eliminar</button></td>`;
+            <td><button id="botonModificar${arrayProductos[i].id}"  onClick = "formulario(${arrayProductos[i].id})" class="btn btn-warning">Modificar</button></td>
+            <td><button id="botonEliminar${arrayProductos[i].id}" onClick = "EliminarProducto(${arrayProductos[i].id})" class="btn btn-danger">Eliminar</button></td>`;
 
 				tabla1.append(tr);
 			} else {
 				select.innerHTML += `<option value="${arrayProductos[i].id}">${arrayProductos[i].nombre}</option>`;
 			}
 		}
+
+		tabla1.innerHTML += `</tbody></table>`;
 
 		if (select.value == "default" && select.length <= 1) {
 			let option = document.querySelector('option[value="default"]');

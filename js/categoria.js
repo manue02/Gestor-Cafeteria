@@ -14,12 +14,16 @@ fetch(apiRest + ficheroCategoria + ".json")
 
 		let tabla1 = document.createElement("table");
 		tabla1.innerHTML = `
-        <tr>
-            <th>Categoria</th>
-            <th><button id="botonNuevo" onClick = "formulario(-1)">Nuevo</button></th>
-            <th><button id="RecuperarCategoriaModal" onClick = "RecuperarCategoriaModal()">Recuperar Categoria</button></th>
+		<table class="container-table100 ">
+			<thead>
+        		<tr class="table100-head">
+            		<th scope="col">Categoria</th>
+            		<th scope="col"><button id="botonNuevo" onClick = "formulario(-1)" class="btn btn-secondary">Nuevo</button></th>
+            		<th scope="col"><button id="RecuperarCategoriaModal" onClick = "RecuperarCategoriaModal()" class="btn btn-secondary">Recuperar Categoria</button></th>
 
-        </tr>`;
+        		</tr>
+			</thead>
+			<tbody>`;
 
 		TablaCategoria.append(tabla1);
 		select = document.getElementsByName("CategoriaEliminado")[0];
@@ -30,14 +34,15 @@ fetch(apiRest + ficheroCategoria + ".json")
 			if (arrayCategoria[i].activo == true) {
 				tr.innerHTML = `
             <td>${arrayCategoria[i].nombre}</td>
-            <td><button id="botonModificar${arrayCategoria[i].id}" onClick = "formulario(${arrayCategoria[i].id})">Modificar</button></td>
-            <td><button id="botonEliminar${arrayCategoria[i].id}" onClick = "EliminarCategoria(${arrayCategoria[i].id})">Eliminar</button></td>`;
+            <td><button id="botonModificar${arrayCategoria[i].id}" onClick = "formulario(${arrayCategoria[i].id})" class="btn btn-warning">Modificar</button></td>
+            <td><button id="botonEliminar${arrayCategoria[i].id}" onClick = "EliminarCategoria(${arrayCategoria[i].id})" class="btn btn-danger">Eliminar</button></td>`;
 
 				tabla1.append(tr);
 			} else {
 				select.innerHTML += `<option value="${arrayCategoria[i].id}">${arrayCategoria[i].nombre}</option>`;
 			}
 		}
+		tabla1.innerHTML += `</tbody></table>`;
 
 		if (select.value == "default" && select.length <= 1) {
 			let option = document.querySelector('option[value="default"]');
