@@ -232,6 +232,7 @@ function RecuperarProductoModal() {
 	let select = document.getElementsByName("ProductoEliminado")[0];
 	let boton = document.querySelector('button[name="RecuperarProducto"]');
 	boton.disabled = true;
+	select.value = "default";
 
 	select.addEventListener("change", function () {
 		if (select.value == "default") {

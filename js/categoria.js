@@ -54,6 +54,17 @@ fetch(apiRest + ficheroCategoria + ".json")
 		}
 	});
 
+function validarNombre(nombre) {
+	// Validar nombre: debe contener solo letras y espacios
+	var regexNombre = /^[a-zA-Z\u00C0-\u00FF\s]+$/;
+	if (!regexNombre.test(nombre)) {
+		alertify.error("El nombre es inválido. Debe contener solo letras y espacios.");
+		return false;
+	}
+
+	return true;
+}
+
 async function NuevaCategoria() {
 	let nombre = document.getElementById("colFormLabelNombreCategoria").value;
 
@@ -65,19 +76,26 @@ async function NuevaCategoria() {
 		activo: true,
 		id: data.length,
 	};
+	if (validarNombre(nombre)) {
+		const putResponse = await fetch(apiRest + ficheroCategoria + "/" + data.length + ".json", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json;charset=utf-8",
+			},
+			body: JSON.stringify(nuevaCategoria),
+		});
 
-	const putResponse = await fetch(apiRest + ficheroCategoria + "/" + data.length + ".json", {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json;charset=utf-8",
-		},
-		body: JSON.stringify(nuevaCategoria),
-	});
+		await putResponse.json();
 
-	await putResponse.json();
+		if (putResponse.ok) {
+			alertify.success("Categoria añadida correctamente");
 
-	if (putResponse.ok) {
-		location.reload();
+			setTimeout(() => {
+				location.reload();
+			}, 1000);
+		} else {
+			alertify.error("Error al añadir la categoria");
+		}
 	}
 }
 
@@ -90,18 +108,26 @@ async function ModificarCategoria(id) {
 		id: id,
 	};
 
-	const putResponse = await fetch(apiRest + ficheroCategoria + "/" + id + ".json", {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json;charset=utf-8",
-		},
-		body: JSON.stringify(modificarCategoria),
-	});
+	if (validarNombre(nombre)) {
+		const putResponse = await fetch(apiRest + ficheroCategoria + "/" + id + ".json", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json;charset=utf-8",
+			},
+			body: JSON.stringify(modificarCategoria),
+		});
 
-	await putResponse.json();
+		await putResponse.json();
 
-	if (putResponse.ok) {
-		location.reload();
+		if (putResponse.ok) {
+			alertify.success("Categoria modificada correctamente");
+
+			setTimeout(() => {
+				location.reload();
+			}, 1000);
+		} else {
+			alertify.error("Error al modificar la categoria");
+		}
 	}
 }
 
@@ -126,13 +152,33 @@ async function EliminarCategoria(id) {
 	await putResponse.json();
 
 	if (putResponse.ok) {
-		location.reload();
+		alertify.success("Categoria eliminada correctamente");
+
+		setTimeout(() => {
+			location.reload();
+		}, 1000);
+	} else {
+		alertify.error("Error al eliminar la categoria");
 	}
 }
 
 function RecuperarCategoriaModal() {
 	var miModal = new bootstrap.Modal(document.getElementById("miModal"));
 	miModal.show();
+
+	let select = document.getElementsByName("CategoriaEliminado")[0];
+	let boton = document.getElementsByName("RecuperarCategoria")[0];
+	select.value = "default";
+
+	boton.disabled = true;
+
+	select.addEventListener("change", function () {
+		if (select.value == "default") {
+			boton.disabled = true;
+		} else {
+			boton.disabled = false;
+		}
+	});
 }
 
 function formulario(value) {
@@ -166,7 +212,7 @@ function formulario(value) {
 }
 
 async function RecuperarCategoria() {
-	let id = document.getElementsByName("ProductoEliminado")[0].value;
+	let id = document.getElementsByName("CategoriaEliminado")[0].value;
 
 	const response = await fetch(apiRest + ficheroCategoria + "/" + id + ".json");
 	let categoria = await response.json();
@@ -183,6 +229,12 @@ async function RecuperarCategoria() {
 	await updateResponse.json();
 
 	if (updateResponse.ok) {
-		location.reload();
+		alertify.success("Categoria recuperada correctamente");
+
+		setTimeout(() => {
+			location.reload();
+		}, 1000);
+	} else {
+		alertify.error("Error al recuperar la categoria");
 	}
 }
