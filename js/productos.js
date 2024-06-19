@@ -90,6 +90,25 @@ fetch(apiRest + ficheroProductos + ".json")
 		}
 	});
 
+function validarNombrePrecio(nombre, precio) {
+	// Validar nombre: debe contener solo letras y espacios
+	var regexNombre = /^[a-zA-Z\u00C0-\u00FF\s]+$/;
+	if (!regexNombre.test(nombre)) {
+		alertify.error("El nombre es inválido. Debe contener solo letras y espacios.");
+		return false;
+	}
+
+	// Validar precio: debe ser un número positivo
+	var regexPrecio = /^\d+(\.\d{1,2})?$/;
+	if (!regexPrecio.test(precio)) {
+		alertify.error("El precio es inválido. Debe ser un número positivo.");
+		return false;
+	}
+
+	// Si ambas validaciones pasan, devolver true
+	return true;
+}
+
 async function NuevoProducto() {
 	let nombre = document.getElementById("colFormLabelNombre").value;
 	let precio = document.getElementById("colFormLabelPrecio").value;
@@ -115,18 +134,26 @@ async function NuevoProducto() {
 		precio: precio,
 	};
 
-	const postResponse = await fetch(apiRest + ficheroProductos + "/" + lastId + ".json", {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json;charset=utf-8",
-		},
-		body: JSON.stringify(nuevoProducto),
-	});
+	if (validarNombrePrecio(nombre, precio)) {
+		const postResponse = await fetch(apiRest + ficheroProductos + "/" + lastId + ".json", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json;charset=utf-8",
+			},
+			body: JSON.stringify(nuevoProducto),
+		});
 
-	await postResponse.json();
+		await postResponse.json();
 
-	if (postResponse.ok) {
-		location.reload();
+		if (postResponse.ok) {
+			alertify.success("Producto añadido correctamente");
+
+			setTimeout(() => {
+				location.reload();
+			}, 1000);
+		}
+	} else {
+		alertify.error("Error al añadir el producto");
 	}
 }
 
@@ -145,18 +172,26 @@ async function ModificarProducto(id) {
 		activo: "true",
 	};
 
-	const putResponse = await fetch(apiRest + ficheroProductos + "/" + (id - 1) + ".json", {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json;charset=utf-8",
-		},
-		body: JSON.stringify(producto),
-	});
+	if (validarNombrePrecio(nombre, precio)) {
+		const putResponse = await fetch(apiRest + ficheroProductos + "/" + (id - 1) + ".json", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json;charset=utf-8",
+			},
+			body: JSON.stringify(producto),
+		});
 
-	await putResponse.json();
+		await putResponse.json();
 
-	if (putResponse.ok) {
-		location.reload();
+		if (putResponse.ok) {
+			alertify.success("Producto modificado correctamente");
+
+			setTimeout(() => {
+				location.reload();
+			}, 1000);
+		}
+	} else {
+		alertify.error("Error al modificar el producto");
 	}
 }
 
@@ -180,19 +215,42 @@ async function EliminarProducto(id) {
 	await updateResponse.json();
 
 	if (updateResponse.ok) {
-		location.reload();
+		alertify.success("Producto eliminado correctamente");
+
+		setTimeout(() => {
+			location.reload();
+		}, 1000);
+	} else {
+		alertify.error("Error al eliminar el producto");
 	}
 }
 
 function RecuperarProductoModal() {
 	var miModal = new bootstrap.Modal(document.getElementById("miModal"));
 	miModal.show();
+
+	let select = document.getElementsByName("ProductoEliminado")[0];
+	let boton = document.querySelector('button[name="RecuperarProducto"]');
+	boton.disabled = true;
+
+	select.addEventListener("change", function () {
+		if (select.value == "default") {
+			boton.disabled = true;
+		} else {
+			boton.disabled = false;
+		}
+	});
 }
 
 function formulario(value) {
-	console.log(value);
 	var formulario = new bootstrap.Modal(document.getElementById("formulario"));
 	formulario.show();
+	let boton = document.querySelector('button[name="ModificarProducto"]');
+	let boton2 = document.querySelector('button[name="NuevoProducto"]');
+	let select = document.getElementsByName("categoriasSelect")[0];
+
+	boton.disabled = true;
+	boton2.disabled = true;
 
 	arrayOriginalProductos.forEach((producto) => {
 		let defaultCategoria = "defaultCategoria";
@@ -203,12 +261,25 @@ function formulario(value) {
 		}
 	});
 
+	select.addEventListener("change", function () {
+		if (select.value == "defaultCategoria") {
+			boton.disabled = true;
+			boton2.disabled = true;
+		} else {
+			boton.disabled = false;
+			boton2.disabled = false;
+		}
+	});
+
 	if (value == -1) {
 		let boton = document.querySelector('button[name="ModificarProducto"]');
 		boton.style.display = "none";
 
 		let boton2 = document.querySelector('button[name="NuevoProducto"]');
 		boton2.style.display = "block";
+
+		document.getElementById("colFormLabelNombre").value = "";
+		document.getElementById("colFormLabelPrecio").value = "";
 	} else {
 		let boton = document.querySelector('button[name="NuevoProducto"]');
 		boton.style.display = "none";
@@ -242,6 +313,12 @@ async function RecuperarProducto() {
 	await updateResponse.json();
 
 	if (updateResponse.ok) {
-		location.reload();
+		alertify.success("Producto recuperado correctamente");
+
+		setTimeout(() => {
+			location.reload();
+		}, 1000);
+	} else {
+		alertify.error("Error al recuperar el producto");
 	}
 }
