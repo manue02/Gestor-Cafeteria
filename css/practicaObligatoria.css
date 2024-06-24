@@ -47,6 +47,13 @@
 	background-color: lightskyblue;
 }
 
+.centrar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%; /* Asegúrate de que el div tenga una altura, de lo contrario, no se verá el centrado vertical */
+}
+
 #frmControles > select {
 	font-size: 20px;
 }

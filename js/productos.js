@@ -3,6 +3,8 @@ let arrayProductos = [];
 arrayProductos = catalogo.productos;
 let arrayCategoria = [];
 let arrayOriginalProductos = [];
+let arrayFiltrado = [];
+let tabla1 = document.createElement("table");
 
 const apiRest = "https://primerproyecto-34e1f-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
@@ -26,7 +28,6 @@ fetch(apiRest + ficheroProductos + ".json")
 			arrayOriginalProductos.push(producto);
 		});
 
-		let tabla1 = document.createElement("table");
 		tabla1.innerHTML = `
 		<table class="container-table100 ">
   			<thead>
@@ -42,7 +43,8 @@ fetch(apiRest + ficheroProductos + ".json")
 
 		TablaProductos.append(tabla1);
 		select = document.getElementsByName("ProductoEliminado")[0];
-		selectCategorias = document.getElementsByName("categoriasSelect")[0];
+		let selectCategorias = document.getElementsByName("categoriasSelect")[0];
+		let filtroCategoriaa = document.getElementsByName("filtroCategoria")[0];
 
 		for (let i = 0; i < arrayProductos.length; i++) {
 			let tr = document.createElement("tr");
@@ -79,14 +81,9 @@ fetch(apiRest + ficheroProductos + ".json")
 			botonRecuperar[0].disabled = true;
 		}
 
-		if (selectCategorias.value == "default" && selectCategorias.length <= 1) {
-			let option = document.querySelector('option[value="default"]');
-			option.innerHTML = "No hay categorias";
-			selectCategorias.disabled = true;
-		} else {
-			for (let i = 0; i < arrayCategoria.length; i++) {
-				selectCategorias.innerHTML += `<option value="${arrayCategoria[i].id}">${arrayCategoria[i].nombre}</option>`;
-			}
+		for (let i = 0; i < arrayCategoria.length; i++) {
+			selectCategorias.innerHTML += `<option value="${arrayCategoria[i].id}">${arrayCategoria[i].nombre}</option>`;
+			filtroCategoriaa.innerHTML += `<option value="${arrayCategoria[i].id}">${arrayCategoria[i].nombre}</option>`;
 		}
 	});
 
@@ -323,3 +320,153 @@ async function RecuperarProducto() {
 		alertify.error("Error al recuperar el producto");
 	}
 }
+
+document.getElementById("filtroCategoria").addEventListener("change", function () {
+	let filtro = document.getElementById("filtroCategoria").value;
+	arrayFiltrado = [];
+	let contador = -1;
+
+	for (let i = 0; i < arrayCategoria.length; i++) {
+		if (filtro == arrayCategoria[i].id) {
+			filtro = arrayCategoria[i].nombre;
+
+			for (let j = 0; j < arrayProductos.length; j++) {
+				if (filtro == arrayProductos[j].categoria && arrayProductos[j].activo == "true") {
+					arrayFiltrado.push(arrayProductos[j]);
+
+					contador++;
+
+					tabla1.innerHTML = `
+					<table class="container-table100 ">
+						<thead>
+							<tr class="table100-head">
+								<th scope="col">Producto</th>
+								<th scope="col">Precio</th>
+								<th scope="col">Categoria</th>
+								<th scope="col"><button id="botonNuevo" onClick = "formulario(-1)" class="btn btn-light">Nuevo</button></th>
+								<th scope="col"><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()" class="btn btn-light">Recuperar Producto</button></th>
+							</tr>
+						</thead>
+						<tbody>`;
+
+					TablaProductos.append(tabla1);
+
+					for (let i = 0; i < arrayFiltrado.length; i++) {
+						let tr = document.createElement("tr");
+
+						tr.innerHTML = `
+							<td scope="row">${arrayFiltrado[i].nombre}</td>
+							<td>${arrayFiltrado[i].precio}€</td>
+							<td>${arrayFiltrado[i].categoria}</td>
+							<td><button id="botonModificar${arrayFiltrado[i].id}"  onClick = "formulario(${arrayFiltrado[i].id})" class="btn btn-warning">Modificar</button></td>
+							<td><button id="botonEliminar${arrayFiltrado[i].id}" onClick = "EliminarProducto(${arrayFiltrado[i].id})" class="btn btn-danger">Eliminar</button></td>`;
+
+						tabla1.append(tr);
+					}
+				}
+			}
+			if (contador == -1) {
+				alertify.error("No hay productos en esta categoria");
+				break;
+			}
+		} else if (filtro == "defaultCategoria") {
+			location.reload();
+		}
+	}
+});
+
+document.getElementById("filtroNombreProducto").addEventListener("click", function () {
+	let filtro = document.getElementById("busquedaNombre").value;
+	let formato = filtro.charAt(0).toUpperCase() + filtro.slice(1).toLowerCase();
+
+	arrayFiltrado = [];
+	let contador = -1;
+
+	for (let i = 0; i < arrayProductos.length; i++) {
+		if (arrayProductos[i].nombre.startsWith(formato) && arrayProductos[i].activo == "true") {
+			arrayFiltrado.push(arrayProductos[i]);
+
+			contador++;
+
+			tabla1.innerHTML = `
+			<table class="container-table100 ">
+				<thead>
+					<tr class="table100-head">
+						<th scope="col">Producto</th>
+						<th scope="col">Precio</th>
+						<th scope="col">Categoria</th>
+						<th scope="col"><button id="botonNuevo" onClick = "formulario(-1)" class="btn btn-light">Nuevo</button></th>
+						<th scope="col"><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()" class="btn btn-light">Recuperar Producto</button></th>
+					</tr>
+				</thead>
+				<tbody>`;
+
+			TablaProductos.append(tabla1);
+
+			for (let i = 0; i < arrayFiltrado.length; i++) {
+				let tr = document.createElement("tr");
+
+				tr.innerHTML = `
+					<td scope="row">${arrayFiltrado[i].nombre}</td>
+					<td>${arrayFiltrado[i].precio}€</td>
+					<td>${arrayFiltrado[i].categoria}</td>
+					<td><button id="botonModificar${arrayFiltrado[i].id}"  onClick = "formulario(${arrayFiltrado[i].id})" class="btn btn-warning">Modificar</button></td>
+					<td><button id="botonEliminar${arrayFiltrado[i].id}" onClick = "EliminarProducto(${arrayFiltrado[i].id})" class="btn btn-danger">Eliminar</button></td>`;
+
+				tabla1.append(tr);
+			}
+		}
+		if (contador == -1) {
+			alertify.error("No hay productos con ese nombre");
+			break;
+		}
+	}
+});
+
+document.getElementById("busquedaNombre").addEventListener("keyup", function () {
+	let filtro = document.getElementById("busquedaNombre").value;
+	let formato = filtro.charAt(0).toUpperCase() + filtro.slice(1).toLowerCase();
+
+	arrayFiltrado = [];
+	let contador = -1;
+
+	for (let i = 0; i < arrayProductos.length; i++) {
+		if (arrayProductos[i].nombre.startsWith(formato) && arrayProductos[i].activo == "true") {
+			arrayFiltrado.push(arrayProductos[i]);
+
+			contador++;
+
+			tabla1.innerHTML = `
+			<table class="container-table100 ">
+				<thead>
+					<tr class="table100-head">
+						<th scope="col">Producto</th>
+						<th scope="col">Precio</th>
+						<th scope="col">Categoria</th>
+						<th scope="col"><button id="botonNuevo" onClick = "formulario(-1)" class="btn btn-light">Nuevo</button></th>
+						<th scope="col"><button id="RecuperarProductoModal" onClick = "RecuperarProductoModal()" class="btn btn-light">Recuperar Producto</button></th>
+					</tr>
+				</thead>
+				<tbody>`;
+
+			TablaProductos.append(tabla1);
+
+			for (let i = 0; i < arrayFiltrado.length; i++) {
+				let tr = document.createElement("tr");
+
+				tr.innerHTML = `
+					<td scope="row">${arrayFiltrado[i].nombre}</td>
+					<td>${arrayFiltrado[i].precio}€</td>
+					<td>${arrayFiltrado[i].categoria}</td>
+					<td><button id="botonModificar${arrayFiltrado[i].id}"  onClick = "formulario(${arrayFiltrado[i].id})" class="btn btn-warning">Modificar</button></td>
+					<td><button id="botonEliminar${arrayFiltrado[i].id}" onClick = "EliminarProducto(${arrayFiltrado[i].id})" class="btn btn-danger">Eliminar</button></td>`;
+
+				tabla1.append(tr);
+			}
+		}
+		if (contador == -1) {
+			alertify.error("No hay productos con ese nombre");
+			break;
+		}
+	}
+});
