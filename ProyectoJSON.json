@@ -1,65 +1,50 @@
 {
 	"MesasPagar": [
 		{
-			"Fecha": "7/5/2024",
-			"Hora": "1:45",
-			"Importe": "24.40€",
-			"NumeroMesa": "6"
-		},
-		{
-			"Fecha": "7/5/2024",
-			"Hora": "1:45",
-			"Importe": "5.70€",
-			"NumeroMesa": "5"
-		},
-		{
-			"Fecha": "7/5/2024",
-			"Hora": "1:45",
-			"Importe": "16.95€",
-			"NumeroMesa": "9"
-		},
-		{
-			"Fecha": "7/5/2024",
-			"Hora": "1:45",
-			"Importe": "16.00€",
-			"NumeroMesa": "8"
-		},
-		{
-			"Fecha": "7/5/2024",
-			"Hora": "1:45",
-			"Importe": "18.50€",
+			"Fecha": "24/06/2024",
+			"Hora": "16:57",
+			"Importe": "6.00€",
 			"NumeroMesa": "1"
 		}
 	],
-
 	"categorias": [
 		{
-			"nombre": "Bebidas",
 			"activo": true,
-			"id": 0
+			"id": 0,
+			"nombre": "Bebidas"
 		},
 		{
-			"nombre": "Tostadas",
 			"activo": true,
-			"id": 1
+			"id": 1,
+			"nombre": "Tostadas"
 		},
 		{
-			"nombre": "Bollería",
 			"activo": true,
-			"id": 2
+			"id": 2,
+			"nombre": "Bollería"
+		},
+		{
+			"activo": true,
+			"id": 3,
+			"nombre": "rrrr"
+		},
+		{
+			"activo": false,
+			"id": 4,
+			"nombre": "otro"
 		}
 	],
-
 	"cuentas": {
-		"Mesa1": {
-			"1": {
+		"Mesa1": [
+			1,
+			{
 				"IdProducto": 1,
 				"nombre": "Café con leche",
-				"precioTotal": 4,
-				"precioUnidad": "1.00",
-				"unidades": 4
+				"precioTotal": "6.00",
+				"precioUnidad": "6.00",
+				"unidades": 1
 			}
-		}
+		]
 	},
 	"productos": [
 		{
@@ -67,7 +52,7 @@
 			"categoria": 0,
 			"id": 1,
 			"nombre": "Café con leche",
-			"precio": "1"
+			"precio": "6"
 		},
 		{
 			"activo": "true",
@@ -172,14 +157,21 @@
 			"categoria": 2,
 			"id": 16,
 			"nombre": "Caña de chocolate",
-			"precio": 1.35
+			"precio": "6"
 		},
 		{
-			"activo": "true",
+			"activo": "false",
 			"categoria": 1,
 			"id": 17,
 			"nombre": "prueba",
 			"precio": "3"
+		},
+		{
+			"activo": "true",
+			"categoria": 0,
+			"id": 18,
+			"nombre": "prueba",
+			"precio": "12"
 		}
 	]
 }

@@ -153,7 +153,13 @@ function liberarMesa() {
 	let fechaActual = new Date();
 
 	//mostrar en formato dd/mm/yyyy
-	let fecha = fechaActual.getDate() + "/" + fechaActual.getMonth() + "/" + fechaActual.getFullYear();
+	let fecha =
+		fechaActual.getDate().toString().padStart(2, "0") +
+		"/" +
+		(fechaActual.getMonth() + 1).toString().padStart(2, "0") +
+		"/" +
+		fechaActual.getFullYear();
+
 	let horaActual = fechaActual.getHours() + ":" + fechaActual.getMinutes();
 	let cuenta = document.getElementById("cuenta");
 	let NumeroMesa = mesa.substring(5, 6);

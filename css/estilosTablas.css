@@ -126,6 +126,33 @@ tbody tr:hover {
 	transition: all 0.2s ease;
 }
 
+body > div > div > input[type="date"]:first-of-type {
+	max-width: 217px;
+	height: 100%;
+	outline: none;
+	font-size: 18px;
+	font-weight: 500;
+	background-color: #53535f;
+	color: #fff;
+	padding: 7px 10px;
+	border: 2px solid transparent;
+	border-radius: 7px;
+	margin-right: 1px;
+	transition: all 0.2s ease;
+}
+
+body > div > div > input[type="date"]:nth-of-type(2) {
+	font-size: 18px;
+}
+
+.margen2 {
+	margin-left: 26%;
+}
+
+.margen3 {
+	margin-left: 2%;
+}
+
 select {
 	max-width: 217px;
 	height: 100%;
@@ -185,5 +212,9 @@ select:focus {
 	color: #fff;
 	line-height: 1.2;
 	font-weight: unset;
+	margin-left: 6%;
+}
+
+.margen {
 	margin-left: 6%;
 }
